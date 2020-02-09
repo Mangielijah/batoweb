@@ -1,0 +1,150 @@
+import 'package:bato_test/models/listing.dart';
+
+List<Listing> sampleListings() {
+  List<String> listingImages = List();
+
+  listingImages.add("https://via.placeholder.com/728x90.png");
+  listingImages.add("https://via.placeholder.com/728x90.png");
+  listingImages.add("https://via.placeholder.com/728x90.png");
+
+  return [
+    Listing(
+     listingID: "2",
+     posterID: "CFH3zkjwqEaT847gYdWaDtzjsqr1",
+     posterNames: "dukedevictoria",
+     type: "standard",
+     desc:
+         "love waoh ash as dogquick brown fox over a lazy dogquick brown fox over a lazy dogquick brown fox over a lazy dogquick brown fox over a lazy dogquick brown fox over a lazy dogquick brown fox over a lazy dogquick brown fox over a lazy dogquick brown fox over a lazy dogquick brown fox over a lazy dogquick brown fox over a lazy dogquick brown fox over a lazy dogquick brown fox over a lazy dogquick brown fox over a lazy dog",
+     price: 1000,
+     location: "Douala",
+     displayImage:
+         "https://assets.pcmag.com/media/images/608623-iphone-xs-max.jpg?thumb=y",
+     postedTime: DateTime.parse("1555181623"),
+     listingLikes: 0,
+     mainCategory: "Beauty & Health",
+     title: "Iphone XS Max",
+     subCategory: "Makeup",
+     //listingLink: "bato.com/287",
+     listingImages: listingImages,
+   ),
+   Listing(
+     listingID: "2",
+     posterID: "usxa",
+     posterNames: "dukedevictoria",
+     type: "standard",
+     desc: "quick brown fox over a lazy dog",
+     price: 1000,
+     displayImage:
+         "https://www.91-img.com/pictures/129875-v4-apple-iphone-xs-max-mobile-phone-large-1.jpg",
+     postedTime: DateTime.parse("1555181623"),
+     listingLikes: 0,
+     mainCategory: "Beauty & Health",
+     subCategory: "Makeup",
+     //listingLink: "bato.com/287",
+     title: "Iphone XS Max",
+     listingImages: listingImages,
+   ),
+   Listing(
+     listingID: "2",
+     posterID: "usxa",
+     posterNames: "dukedevictoria",
+     type: "standard",
+     desc: "quick brown fox over a lazy dog",
+     price: 1000,
+     displayImage:
+         "https://ae01.alicdn.com/kf/HTB1BJwqOFXXXXcwXFXXq6xXFXXXB/9-Items-Makeup-Set-Eyeshadow-Eyeliner-Mascara-Face-Powder-Foundation-Lipstick-Blusher-Concealer-Eyebrow-Pencil-Makeup.jpg_640x640.jpg",
+     postedTime: DateTime.parse("1555181623"),
+     listingLikes: 0,
+     mainCategory: "Beauty & Health",
+     subCategory: "Makeup",
+     //listingLink: "bato.com/287",
+     listingImages: listingImages,
+     title: "Iphone XS Max",
+   ),
+   Listing(
+     listingID: "2",
+     posterID: "usxa",
+     posterNames: "dukedevictoria",
+     type: "standard",
+     desc: "quick brown fox over a lazy dog",
+     price: 1000,
+     displayImage:
+         "https://ae01.alicdn.com/kf/HTB1BJwqOFXXXXcwXFXXq6xXFXXXB/9-Items-Makeup-Set-Eyeshadow-Eyeliner-Mascara-Face-Powder-Foundation-Lipstick-Blusher-Concealer-Eyebrow-Pencil-Makeup.jpg_640x640.jpg",
+     title: "Iphone XS Max",
+     postedTime: DateTime.parse("1555181623"),
+     listingLikes: 0,
+     mainCategory: "Beauty & Health",
+     subCategory: "Makeup",
+     //listingLink: "bato.com/287",
+     listingImages: listingImages,
+   ),
+   Listing(
+     listingID: "2",
+     posterID: "usxa",
+     posterNames: "dukedevictoria",
+     type: "standard",
+     desc: "quick brown fox over a lazy dog",
+     price: 1000,
+     displayImage:
+         "https://ae01.alicdn.com/kf/HTB1BJwqOFXXXXcwXFXXq6xXFXXXB/9-Items-Makeup-Set-Eyeshadow-Eyeliner-Mascara-Face-Powder-Foundation-Lipstick-Blusher-Concealer-Eyebrow-Pencil-Makeup.jpg_640x640.jpg",
+     title: "Iphone XS Max",
+     postedTime: DateTime.parse("1555181623"),
+     listingLikes: 0,
+     mainCategory: "Beauty & Health",
+     subCategory: "Makeup",
+     //listingLink: "bato.com/287",
+     listingImages: listingImages,
+   ),
+   Listing(
+     listingID: "2",
+     posterID: "usxa",
+     posterNames: "dukedevictoria",
+     type: "standard",
+     desc: "quick brown fox over a lazy dog",
+     price: 1000,
+     displayImage:
+         "https://ae01.alicdn.com/kf/HTB1BJwqOFXXXXcwXFXXq6xXFXXXB/9-Items-Makeup-Set-Eyeshadow-Eyeliner-Mascara-Face-Powder-Foundation-Lipstick-Blusher-Concealer-Eyebrow-Pencil-Makeup.jpg_640x640.jpg",
+     title: "Iphone XS Max",
+     postedTime: DateTime.parse("1555181623"),
+     listingLikes: 0,
+     mainCategory: "Beauty & Health",
+     subCategory: "Makeup",
+     //listingLink: "bato.com/287",
+     listingImages: listingImages,
+   ),
+   Listing(
+     listingID: "2",
+     posterID: "usxa",
+     posterNames: "dukedevictoria",
+     type: "standard",
+     desc: "quick brown fox over a lazy dog",
+     price: 1000,
+     displayImage:
+         "https://ae01.alicdn.com/kf/HTB1BJwqOFXXXXcwXFXXq6xXFXXXB/9-Items-Makeup-Set-Eyeshadow-Eyeliner-Mascara-Face-Powder-Foundation-Lipstick-Blusher-Concealer-Eyebrow-Pencil-Makeup.jpg_640x640.jpg",
+     title: "Iphone XS Max",
+     postedTime: DateTime.parse("1555181623"),
+     listingLikes: 0,
+     mainCategory: "Beauty & Health",
+     subCategory: "Makeup",
+     //listingLink: "bato.com/287",
+     listingImages: listingImages,
+   ),
+   Listing(
+     listingID: "11",
+     posterID: "usxa",
+     posterNames: "dukedevictoria",
+     type: "standard",
+     desc: "quick brown fox over a lazy dog",
+     price: 1000,
+     displayImage:
+         "https://ae01.alicdn.com/kf/HTB1BJwqOFXXXXcwXFXXq6xXFXXXB/9-Items-Makeup-Set-Eyeshadow-Eyeliner-Mascara-Face-Powder-Foundation-Lipstick-Blusher-Concealer-Eyebrow-Pencil-Makeup.jpg_640x640.jpg",
+     title: "Iphone XS Max",
+     postedTime: DateTime.parse("1555181623"),
+     listingLikes: 0,
+     mainCategory: "Beauty & Health",
+     subCategory: "Makeup",
+     //listingLink: "bato.com/287",
+     listingImages: listingImages,
+        ),
+  ];
+}
