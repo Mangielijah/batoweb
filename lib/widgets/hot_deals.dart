@@ -55,7 +55,7 @@ class _HotDealsScreenState extends State<HotDealsScreen> {
                       children: snapshot.data.docs
                           .map((document) {
                             //lenghtOfDoc = document.data().length;
-                            print(document.data().toString());
+                            //print(document.data().toString());
                             return new ListingCard(
                               listing: Listing.fromJSON(document),
                             );
