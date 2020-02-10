@@ -1,14 +1,19 @@
 
 import 'package:bato_test/models/listing.dart';
+import 'package:bato_test/utils/locator.dart';
+import 'package:bato_test/utils/navigation_service.dart';
+import 'package:bato_test/utils/route_name.dart';
 import 'package:bato_test/widgets/listing_card.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase/firebase.dart' as WebFirebase;
 import 'package:firebase/firestore.dart' as WebFirestore;
 
 WebFirestore.Firestore webFirestore = WebFirebase.firestore();
+final NavigationService _navigationService = locator<NavigationService>();
 ///navigate to Listing
 navigateToListing(BuildContext context, String listingId) {
-  Navigator.of(context).pushNamed("/viewListing", arguments: listingId);
+  //Navigator.of(context).pushNamed(ListingViewRoute, arguments: listingId);
+  _navigationService.navigateTo(ListingViewRoute, queryParams: {'listingId': listingId});
 }
 
 showListings(String collectionName) {

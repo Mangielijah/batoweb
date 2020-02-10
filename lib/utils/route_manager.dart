@@ -6,27 +6,29 @@
 // import 'package:bato/ui/screens/messages.dart';
 import 'package:bato_test/screens/home.view.dart';
 import 'package:bato_test/screens/listing.view.dart';
+import 'package:bato_test/utils/route_name.dart';
 // import 'package:bato/ui/widgets/profile_settings.dart';
 // import 'package:bato/ui/screens/search.dart';
 // import 'package:bato/ui/screens/search_user.dart';
 // import 'package:bato/ui/screens/view_item.dart';
 import 'package:flutter/material.dart';
+import 'package:bato_test/utils/string_extension.dart';
 
 ///Manage Routes
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings){
     //Getting the argument passed when Navigator.pushNamed() is called
-    final args = settings.arguments;
-    switch(settings.name){
-      case '/home':
+    var routingData = settings.name.getRoutingData;
+    switch(routingData.route){
+      case HomeRoute:
         return MaterialPageRoute(builder: (context) => Home());
-      case "/viewListing":
-        if(args is String){
-          return MaterialPageRoute(builder: (context) => ListingView(listingId: args));
+      case ListingViewRoute:
+        if(routingData['listingId'] is String){
+          return MaterialPageRoute(builder: (context) => ListingView(listingId: routingData['listingId']));
         }
         return _errorPage();
       default:
-        return _errorPage();
+        return MaterialPageRoute(builder: (context) => Home());
     }
   }
   static Route<dynamic> _errorPage(){

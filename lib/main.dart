@@ -2,11 +2,12 @@ import 'package:bato_test/theme.dart';
 import 'package:bato_test/utils/locator.dart';
 import 'package:bato_test/utils/navigation_service.dart';
 import 'package:bato_test/utils/route_manager.dart';
+import 'package:bato_test/utils/route_name.dart';
+import 'package:bato_test/widgets/layout_template.dart';
 import 'package:firebase/firebase.dart' as WebFirebase;
 import 'package:flutter/material.dart';
 
 void main() {
-  setupLocator();
   if (WebFirebase.apps.isEmpty) {
     WebFirebase.initializeApp(
         apiKey: "AIzaSyDY4PKj2xVNoEMkHhS8RWC7fCJwRW7Md3M",
@@ -17,6 +18,8 @@ void main() {
         messagingSenderId: "406301059990",
         appId: "1:406301059990:web:138c4936c0a9a51898cbb7");
   }
+  
+  setupLocator();
   runApp(Bato());
 }
 
@@ -26,7 +29,7 @@ class Bato extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: appTheme(),
-      initialRoute: '/home',
+      initialRoute: HomeRoute,
       builder: (BuildContext context, Widget child) => LayoutTemplate(child: child),
       navigatorKey: locator<NavigationService>().navigatorKey,
       onGenerateRoute: RouteGenerator.generateRoute,
@@ -35,14 +38,3 @@ class Bato extends StatelessWidget {
   }
 }
 
-class LayoutTemplate extends StatelessWidget {
-  final Widget child;
-  const LayoutTemplate({Key key, this.child}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: child,
-    );
-  }
-}

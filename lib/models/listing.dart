@@ -69,7 +69,7 @@ class Listing {
             listingLikes: data.get("listingLikes"),//data["listingLikes"],
             mainCategory: data.get("mainCategory"),//data["mainCategory"],
             subCategory: data.get("subCategory"),//data["subCategory"],
-            listingImages: data.get("listingImages.values"),//data["listingImages"].cast<String>(),
+            listingImages: data.data()["listingImages"].cast<String>(),//data["listingImages"].cast<String>(),
             deliveryAvailable: data.get("deliveryAvailable")//data["deliveryAvailable"]
             
             );
