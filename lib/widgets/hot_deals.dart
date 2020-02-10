@@ -15,10 +15,14 @@ class HotDealsScreen extends StatefulWidget {
 }
 
 class _HotDealsScreenState extends State<HotDealsScreen> {
+  int perPage = 4;
+  //int present = 0;
+  //int lenghtOfDoc = 9;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 40),
       child: Card(
         margin: EdgeInsets.zero,
         elevation: 0.1,
@@ -27,25 +31,61 @@ class _HotDealsScreenState extends State<HotDealsScreen> {
           padding: const EdgeInsets.all(12.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               titleRow(context, "Fresh Finds", iconData: Icons.whatshot),
               Flexible(
                 fit: FlexFit.loose,
-                child: GridView.count(
-                  crossAxisCount: 4,
-                   childAspectRatio: (9/10),
+                child: new StreamBuilder(
+                  stream: webFirestore
+                      .collection('listings').limit(perPage)
+                      .get()
+                      .asStream(), //Firestore.instance.collection('listings').snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<WebFirestore.QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData) return new Text('Loading...');
+                    return new GridView.count(
+                      crossAxisCount: 4,
                       shrinkWrap: true,
-                      mainAxisSpacing: 12.0,
-                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                      childAspectRatio:
+                          (MediaQuery.of(context).size.width / 4) / 500,
+                      crossAxisSpacing: 4.0,
                       scrollDirection: Axis.vertical,
-                      children: sampleListings().map((listing) {
-                        return new ListingCard(
-                          listing: listing,
-                        );
-                      }).toList(),
+                      children: snapshot.data.docs
+                          .map((document) {
+                            //lenghtOfDoc = document.data().length;
+                            print(document.data().toString());
+                            return new ListingCard(
+                              listing: Listing.fromJSON(document),
+                            );
+                          })
+                          .toList()
+                          //.getRange(present, perPage)
+                          //.toList(),
+                    );
+                  },
                 ),
               ),
+              /*Container(
+                  child: (perPage < lenghtOfDoc) ? MaterialButton(
+                onPressed: () {
+                  setState(() {
+                    if((present + perPage) > lenghtOfDoc) {
+                      
+                    } else {
+                      perPage += 12;
+                    }
+                  });
+                },
+                elevation: 0.0,
+                color: Colors.blue,
+                child: Text(
+                  "Load More",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ) : null
+              )*/
             ],
           ),
         ),
@@ -54,30 +94,21 @@ class _HotDealsScreenState extends State<HotDealsScreen> {
   }
 }
 
-
 /*
-new StreamBuilder(
-                stream: webFirestore
-                    .collection('listings')
-                    .get()
-                    .asStream(), //Firestore.instance.collection('listings').snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<WebFirestore.QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) return new Text('Loading...');
-                  return new GridView.count(
-                    crossAxisCount: 4,
-                    childAspectRatio: (9/10),
-                    shrinkWrap: true,
-                    mainAxisSpacing: 12.0,
-                    crossAxisSpacing: 8.0,
-                    scrollDirection: Axis.vertical,
-                    children: snapshot.data.docs.map((document) {
-                      print(document.data().toString());
+GridView.count(
+                  crossAxisCount: 4,
+                  shrinkWrap: true,
+                  mainAxisSpacing: 8.0,
+                  childAspectRatio: (MediaQuery.of(context).size.width / 4) / 500,
+                  crossAxisSpacing: 4.0,
+                  scrollDirection: Axis.vertical,
+                  children: sampleListings().map(
+                    (listing) {
                       return new ListingCard(
-                        listing: Listing.fromJSON(document),
+                        listing: listing,
                       );
-                    }).toList(),
-                  );
-                },
-              )
+                    },
+                  ).toList(),
+                ),
+
 */

@@ -1,13 +1,16 @@
-import 'package:bato_test/banner_section/banner_section.controller.dart';
-import 'package:bato_test/category_section/category_view.dart';
 import 'package:bato_test/navbar/navbar.dart';
 import 'package:bato_test/navbar/navbar.menu.dart';
-import 'package:bato_test/widgets/hot_deals.dart';
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget {
-  const Home({Key key}) : super(key: key);
+class ListingView extends StatefulWidget {
+  final String listingId;
+  const ListingView({Key key, this.listingId}) : super(key: key);
 
+  @override
+  _ListingViewState createState() => _ListingViewState();
+}
+
+class _ListingViewState extends State<ListingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +36,6 @@ class Home extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Flexible(child: BannerSection()),
-                    Flexible(child: CategorySection()),
-                    Flexible(child: HotDealsScreen())
                   ],
                 ),
               ),
@@ -46,5 +46,3 @@ class Home extends StatelessWidget {
     );
   }
 }
-
-//height: MediaQuery.of(context).size.height - 107,

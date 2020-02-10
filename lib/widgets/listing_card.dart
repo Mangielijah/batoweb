@@ -1,6 +1,6 @@
 
-//import 'package:bato/utils/listings_manager.dart';
 import 'package:bato_test/models/listing.dart';
+import 'package:bato_test/utils/listings_manager.dart';
 import 'package:flutter/material.dart';
 
 ///An instance of a listing card
@@ -21,22 +21,22 @@ class _ListingCardState extends State<ListingCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){}, //=> navigateToListing(context, widget.listing.listingID),
-      child: Container(
-        //height: 400,
-        //width: 200,
-        child: Card(
-          elevation: 0.2,
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Flexible(child: _buildTop(context)),
-                  Flexible(child: _buildTitleAndFavorite()),
-                  Flexible(child: _buildListingPrice()),
+      onTap: () => navigateToListing(context, widget.listing.listingID),
+      child: Card(
+        elevation: 0,
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                _buildTop(context),
+                Expanded(
+                  child: _buildTitleAndFavorite(),
+                ),
+                Expanded(
+                  child: _buildListingPrice(),
+                ),
 //                Padding(
 //                  padding: const EdgeInsets.only(top: 8.0),
 //                  child: Row(
@@ -56,8 +56,7 @@ class _ListingCardState extends State<ListingCard> {
 //                    ],
 //                  ),
 //                )
-                ]),
-          ),
+              ]),
         ),
       ),
     );
@@ -96,7 +95,7 @@ class _ListingCardState extends State<ListingCard> {
   ///format and display listing price
   Text _buildListingPrice() {
     return Text(
-      "F " + widget.listing.getFormattedPrice,
+      widget.listing.getFormattedPrice + " FCFA",
       style: TextStyle(color: Colors.lightBlue[500]),
     );
   }
@@ -115,42 +114,54 @@ class _ListingCardState extends State<ListingCard> {
 
   Widget _buildTop(BuildContext context) {
     return Container(
-      height: 150,
-      child: Stack(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          _showImage(),
           _showTimeAgo(),
+          _showImage(),
         ],
       ),
     );
   }
 
   ///show how long ago ad was posted
-  Positioned _showTimeAgo() {
-    return Positioned.fill(
-      top: 0,
-      right: 0,
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Colors.black.withOpacity(0.5), Colors.transparent],
-                begin: Alignment.topCenter,
-                end: Alignment.center)),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 4.0),
-          child: Text(
-            "2 days",
-            style: TextStyle(color: Colors.white),
+  _showTimeAgo() {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8.0, top: 4.0, bottom: 8.0),
+        child: Text(
+          "2 days ago",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18
           ),
         ),
       ),
     );
   }
 
-  ClipRRect _showImage() {
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: Image.network(widget.listing.displayImage));
+  _showImage() {
+    // return ClipRRect(
+    //     borderRadius: BorderRadius.circular(8.0),
+    //     child: Image.network(widget.listing.displayImage));
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(8),
+        image: DecorationImage(
+          fit: BoxFit.fitHeight,
+          image: AssetImage("assets/images/loading.gif"),
+        ),
+      ),
+      child: Center(
+        child: Image.network(
+          widget.listing.displayImage,
+          fit: BoxFit.fitHeight,
+          height: 300,
+        ),
+      ),
+    );
   }
 
   ///build heart button on images

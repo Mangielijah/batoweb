@@ -1,5 +1,6 @@
 import 'package:bato_test/screens/home.view.dart';
 import 'package:bato_test/theme.dart';
+import 'package:bato_test/utils/route_manager.dart';
 import 'package:firebase/firebase.dart' as WebFirebase;
 import 'package:flutter/material.dart';
 
@@ -23,17 +24,10 @@ class Bato extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: appTheme(),
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
       debugShowCheckedModeBanner: false,
-      home: MainApp(),
     );
   }
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.white, body: Home());
-  }
-}
