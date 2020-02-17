@@ -24,7 +24,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => Home());
       case ListingViewRoute:
         if(routingData['listingId'] is String){
-          return MaterialPageRoute(builder: (context) => ListingView(listingId: routingData['listingId']));
+          return MaterialPageRoute(builder: (context) => ListingView(listingId: routingData['listingId'], posterId: routingData['posterId']));
         }
         return _errorPage();
       default:

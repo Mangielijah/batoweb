@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 titleRow(BuildContext context, String titleText, {dynamic iconData}) {
   return Padding(
-    padding: const EdgeInsets.only(bottom: 18),
+    padding: const EdgeInsets.only(bottom: 4),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,

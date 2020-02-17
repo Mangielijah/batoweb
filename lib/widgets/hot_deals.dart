@@ -1,4 +1,3 @@
-import 'package:bato_test/DOA/listing_samples.dart';
 import 'package:bato_test/models/listing.dart';
 import 'package:bato_test/utils/text_manager.dart';
 import 'package:bato_test/widgets/listing_card.dart';

@@ -8,6 +8,7 @@ import 'package:firebase/firebase.dart' as WebFirebase;
 import 'package:flutter/material.dart';
 
 void main() {
+  setupLocator();
   if (WebFirebase.apps.isEmpty) {
     WebFirebase.initializeApp(
         apiKey: "AIzaSyDY4PKj2xVNoEMkHhS8RWC7fCJwRW7Md3M",
@@ -18,8 +19,6 @@ void main() {
         messagingSenderId: "406301059990",
         appId: "1:406301059990:web:138c4936c0a9a51898cbb7");
   }
-  
-  setupLocator();
   runApp(Bato());
 }
 

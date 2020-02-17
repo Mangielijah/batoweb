@@ -11,9 +11,9 @@ import 'package:firebase/firestore.dart' as WebFirestore;
 WebFirestore.Firestore webFirestore = WebFirebase.firestore();
 final NavigationService _navigationService = locator<NavigationService>();
 ///navigate to Listing
-navigateToListing(BuildContext context, String listingId) {
+navigateToListing(BuildContext context, String listingId, String posterId) {
   //Navigator.of(context).pushNamed(ListingViewRoute, arguments: listingId);
-  _navigationService.navigateTo(ListingViewRoute, queryParams: {'listingId': listingId});
+  _navigationService.navigateTo(ListingViewRoute, queryParams: {'listingId': listingId, 'posterId': posterId});
 }
 
 showListings(String collectionName) {
