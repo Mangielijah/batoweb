@@ -1,4 +1,5 @@
 import 'package:bato_test/banner_section/banner_section.desktop.dart';
+import 'package:bato_test/banner_section/banner_section.mobile.dart';
 import 'package:flutter/material.dart';
 
 class BannerSection extends StatelessWidget {
@@ -19,8 +20,9 @@ class BannerSection extends StatelessWidget {
         } else {
           // mobile view of website
 
-          return BannerSectionDesktop(
+          return BannerSectionMobile(
             screenWidth: constraints.biggest.width,
+            screenHeight: 616,
           );
         }
       },

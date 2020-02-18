@@ -1,4 +1,3 @@
-
 import 'package:bato_test/models/listing.dart';
 import 'package:bato_test/utils/locator.dart';
 import 'package:bato_test/utils/navigation_service.dart';
@@ -10,10 +9,26 @@ import 'package:firebase/firestore.dart' as WebFirestore;
 
 WebFirestore.Firestore webFirestore = WebFirebase.firestore();
 final NavigationService _navigationService = locator<NavigationService>();
+
 ///navigate to Listing
 navigateToListing(BuildContext context, String listingId, String posterId) {
   //Navigator.of(context).pushNamed(ListingViewRoute, arguments: listingId);
-  _navigationService.navigateTo(ListingViewRoute, queryParams: {'listingId': listingId, 'posterId': posterId});
+  _navigationService.navigateTo(ListingViewRoute,
+      queryParams: {'listingId': listingId, 'posterId': posterId});
+}
+
+///Navigate to Category Page
+navigateToCategoryView(BuildContext context,
+    {String mainCategory, String subCategory}) {
+    if(subCategory == null){
+      _navigationService.navigateTo(CategoryViewRoute,
+          queryParams: {'mainCategory': mainCategory, });
+
+    }
+    else {
+      _navigationService.navigateTo(CategoryViewRoute,
+        queryParams: {'mainCategory': mainCategory, 'subCategory': subCategory});
+    }
 }
 
 showListings(String collectionName) {
@@ -22,8 +37,8 @@ showListings(String collectionName) {
       Expanded(
         child: StreamBuilder(
             stream: webFirestore.collection(collectionName).get().asStream(),
-            builder:
-                (BuildContext context, AsyncSnapshot<WebFirestore.QuerySnapshot> snapshot) {
+            builder: (BuildContext context,
+                AsyncSnapshot<WebFirestore.QuerySnapshot> snapshot) {
               if (snapshot.connectionState == ConnectionState.active &&
                   !snapshot.hasData) return Text("loading");
               return new GridView.count(

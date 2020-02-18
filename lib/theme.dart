@@ -9,11 +9,11 @@ ThemeData appTheme() {
     // Define the default TextTheme. Use this to specify the default
     // text styling for headlines, titles, bodies of text, and more.
     textTheme: TextTheme(
-      headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-      title: TextStyle(
+      headline5: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+      headline6: TextStyle(
           fontFamily: 'Roboto', fontWeight: FontWeight.w500, fontSize: 25),
-      body1: TextStyle(fontSize: 16.0, fontFamily: 'WorkSansMedium'),
-      subhead: TextStyle(fontWeight: FontWeight.w500, fontSize: 19)
+      bodyText2: TextStyle(fontSize: 16.0, fontFamily: 'WorkSansMedium'),
+      subtitle1: TextStyle(fontWeight: FontWeight.w500, fontSize: 19)
 
 
     ),

@@ -1,6 +1,7 @@
 import 'package:bato_test/models/listing.dart';
 import 'package:bato_test/navbar/navbar.dart';
 import 'package:bato_test/navbar/navbar.menu.dart';
+import 'package:bato_test/utils/listings_manager.dart';
 import 'package:bato_test/utils/locator.dart';
 import 'package:bato_test/utils/navigation_service.dart';
 import 'package:bato_test/utils/route_name.dart';
@@ -76,19 +77,67 @@ class _ListingViewState extends State<ListingView> {
                           child: Image.asset("assets/images/searching.gif"),
                         ),
                       )
-                    : Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 150, vertical: 20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            _buildBreadCrumb(),
-                            _listingDetailCard(),
-                            SizedBox(height: 16,),
-                            _showOtherListing()
-                          ],
-                        ),
-                      ),
+                    : LayoutBuilder(builder: (context, constraints) {
+                        if (constraints.maxWidth > 1200) {
+                          //desktop View
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 110),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 150, vertical: 20),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  _buildBreadCrumb(),
+                                  _listingDetailCard(),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  _showOtherListing()
+                                ],
+                              ),
+                            ),
+                          );
+                        } else if (constraints.maxWidth > 800 &&
+                            constraints.maxWidth < 1200) {
+                          // Tablet View
+
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 20),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                _buildBreadCrumb(),
+                                _listingDetailCard(),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                _showOtherListing()
+                              ],
+                            ),
+                          );
+                        } else {
+                          // mobile view of website
+
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                _buildBreadCrumbMobile(),
+                                _listingDetailCardMobile(),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                _showOtherListingMobile()
+                              ],
+                            ),
+                          );
+                        }
+                      }),
               ),
             )
           ],
@@ -117,20 +166,48 @@ class _ListingViewState extends State<ListingView> {
       ),
     );
   }
+  
+  _buildBreadCrumbMobile() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          _buildBreadCrumbItem("Home"),
+          Text(
+            ">",
+            style: TextStyle(color: Colors.grey, fontSize: 12.0),
+          ),
+          _buildBreadCrumbItem(listing.mainCategory),
+          Text(
+            ">",
+            style: TextStyle(color: Colors.grey, fontSize: 12.0),
+          ),
+          _buildBreadCrumbItem(listing.subCategory)
+        ],
+      ),
+    );
+  }
 
   _buildBreadCrumbItem(String category) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       child: GestureDetector(
         onTap: () {
           if (category == "Home") {
             _navigationService.navigateTo(HomeRoute);
-          }
+          } else if (category == listing.subCategory) {
+            navigateToCategoryView(context,
+                mainCategory: listing.mainCategory,
+                subCategory: listing.subCategory);
+          } else if (category == listing.mainCategory) {
+            navigateToCategoryView(context, mainCategory: listing.mainCategory);
+          } 
         },
         child: Text(category,
             style: TextStyle(
               color: Colors.blue,
-              fontSize: 14,
+              fontSize: 12,
             )),
       ),
     );
@@ -148,6 +225,27 @@ class _ListingViewState extends State<ListingView> {
             _showCarousel(),
             Expanded(child: _showDetails()),
           ],
+        ),
+      ),
+    );
+  }
+
+  //  Mobile Version
+    _listingDetailCardMobile() {
+    return Container(
+      height: 900,//(MediaQuery.of(context).size.height + 160),
+      child: Card(
+        elevation: 1.0,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              _showCarousel(),
+              _showDetailsMobile(),
+            ],
+          ),
         ),
       ),
     );
@@ -206,7 +304,7 @@ class _ListingViewState extends State<ListingView> {
 
   _showDetails() {
     return Container(
-      padding: EdgeInsets.all(24),
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,28 +328,92 @@ class _ListingViewState extends State<ListingView> {
           ),
           Text(
             listing.title,
-            style: Theme.of(context).textTheme.display1,
+            style: Theme.of(context).textTheme.headline4,
           ),
           SizedBox(
             height: 14,
           ),
           _buildStatusSection(),
-          SizedBox(height: 8,),
-          Text("Description", style: TextStyle(
-            fontSize: 20
-          ),),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
+          Text(
+            "Description",
+            style: TextStyle(fontSize: 20),
+          ),
+          SizedBox(
+            height: 8,
+          ),
           Divider(
             thickness: 1,
             height: 1.0,
           ),
-          SizedBox(height: 8.0,),
+          SizedBox(
+            height: 8.0,
+          ),
           Text(
             listing.desc,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w300
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+          )
+        ],
+      ),
+    );
+  }
+
+  //MObile Text Details
+  
+  _showDetailsMobile() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildProfileNameRow(
+              seller.profileImg, listing.posterNames, seller.username),
+          buildUserReviewBarMobile(context, seller.reviewsAvg, seller.reviewsCount),
+          SizedBox(
+            height: 8,
+          ),
+          _buildPriceSection(),
+          SizedBox(
+            height: 5.0,
+          ),
+          Divider(
+            thickness: 1,
+            height: 1.0,
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Text(
+            listing.title,
+            style: Theme.of(context).textTheme.headline4,
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          _buildStatusSection(),
+          SizedBox(
+            height: 8,
+          ),
+          Text(
+            "Description",
+            style: TextStyle(fontSize: 18),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Divider(
+            thickness: 1,
+            height: 1.0,
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+          Text(
+            listing.desc,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
           )
         ],
       ),
@@ -366,14 +528,44 @@ class _ListingViewState extends State<ListingView> {
           padding: const EdgeInsets.only(left: 2.0),
           child: Text(
             reviewCount.toString() + " Reviews",
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w300),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
           ),
         )
       ],
     );
   }
+
+//Mobile Review Sectionj
+buildUserReviewBarMobile(BuildContext context, double userRating, int reviewCount) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Text("Seller Rating: ", style: TextStyle(fontSize: 12)),
+        RatingBar.readOnly(
+          initialRating: userRating,
+          isHalfAllowed: true,
+          halfFilledIcon: Icons.star_half,
+          filledIcon: Icons.star,
+          filledColor: Colors.amber,
+          halfFilledColor: Colors.amberAccent,
+          size: 16,
+          emptyIcon: Icons.star_border,
+        ),
+        SizedBox(
+          width: 2.0,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 2.0),
+          child: Text(
+            reviewCount.toString() + " Reviews",
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),
+          ),
+        )
+      ],
+    );
+  }
+
 
   _buildPriceSection() {
     return Container(
@@ -390,18 +582,20 @@ class _ListingViewState extends State<ListingView> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               buildFavoriteButton(false),
-              SizedBox(width: 4,),
+              SizedBox(
+                width: 4,
+              ),
               (listing.listingLikes > 0)
                   ? Text(
                       listing.listingLikes.toString(),
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w300),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                     )
-                  : Text("0 Likes", style: TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.w300
-
-                  ),),
+                  : Text(
+                      "0 Likes",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                    ),
             ],
           )
         ],
@@ -448,8 +642,9 @@ class _ListingViewState extends State<ListingView> {
                       crossAxisCount: 4,
                       shrinkWrap: true,
                       mainAxisSpacing: 8.0,
+                      primary: false,
                       childAspectRatio:
-                          (MediaQuery.of(context).size.width / 4) / 530,
+                          (MediaQuery.of(context).size.width / 4) / 600,
                       crossAxisSpacing: 4.0,
                       scrollDirection: Axis.vertical,
                       children: snapshot.data.docs.map((document) {
@@ -470,4 +665,59 @@ class _ListingViewState extends State<ListingView> {
       ),
     );
   }
+
+  // Mobile Version of Show other Listing
+  
+  _showOtherListingMobile() {
+    return Card(
+      margin: EdgeInsets.zero,
+      elevation: 0.1,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            titleRow(context, "You may also like", iconData: Icons.whatshot),
+            Flexible(
+              fit: FlexFit.loose,
+              child: new StreamBuilder(
+                stream: webFirestore
+                    .collection('listings')
+                    .where('subCategory', "==", listing.subCategory)
+                    .limit(12)
+                    .get()
+                    .asStream(), //Firestore.instance.collection('listings').snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<WebFirestore.QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) return new Text('Loading...');
+                  return new GridView.count(
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      mainAxisSpacing: 8.0,
+                      primary: false,
+                      childAspectRatio:
+                          (MediaQuery.of(context).size.width / 2) / 500,
+                      crossAxisSpacing: 4.0,
+                      scrollDirection: Axis.vertical,
+                      children: snapshot.data.docs.map((document) {
+                        //lenghtOfDoc = document.data().length;
+                        //print(document.data().toString());
+                        return new ListingCard(
+                          listing: Listing.fromJSON(document),
+                        );
+                      }).toList()
+                      //.getRange(present, perPage)
+                      //.toList(),
+                      );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 }

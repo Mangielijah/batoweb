@@ -1,4 +1,5 @@
 import 'package:bato_test/navbar/navbar_menu.desktop.dart';
+import 'package:bato_test/navbar/navbar_menu.mobile.dart';
 import 'package:flutter/material.dart';
 
 class NavBarMenu extends StatelessWidget {
@@ -18,7 +19,10 @@ class NavBarMenu extends StatelessWidget {
         else {
           // mobile view of website
           
-          return NavBarMenuDesktop();
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 18),
+            child: NavBarMenuMobile(width: constraints.maxWidth - 30,),
+          );
         }
       },
     );

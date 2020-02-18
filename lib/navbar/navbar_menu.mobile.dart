@@ -1,15 +1,16 @@
 import 'package:bato_test/utils/categories.dart';
+import 'package:bato_test/utils/listings_manager.dart';
 import 'package:flutter/material.dart';
 
-class NavBarMenuDesktop extends StatefulWidget {
+class NavBarMenuMobile extends StatefulWidget {
   final width;
-  const NavBarMenuDesktop({Key key, this.width}) : super(key: key);
+  const NavBarMenuMobile({Key key, this.width}) : super(key: key);
 
   @override
-  _NavBarMenuDesktopState createState() => _NavBarMenuDesktopState();
+  _NavBarMenuMobileState createState() => _NavBarMenuMobileState();
 }
 
-class _NavBarMenuDesktopState extends State<NavBarMenuDesktop> {
+class _NavBarMenuMobileState extends State<NavBarMenuMobile> {
   List<Category> allCategories;
 
   @override
@@ -28,7 +29,7 @@ class _NavBarMenuDesktopState extends State<NavBarMenuDesktop> {
         primary: false,
         shrinkWrap: false,
         children: allCategories.map((category){
-          return MenuItem(category.categoryName);
+          return MenuItem(category.categoryName, subCategories: category.subCategories,);
         }).skip(1).toList()
       ),
     );
@@ -48,13 +49,17 @@ class _NavBarMenuDesktopState extends State<NavBarMenuDesktop> {
 */
 
 class MenuItem extends StatelessWidget {
-  const MenuItem(this.text);
+  const MenuItem(this.text, {this.subCategories});
   final String text;
+  final List<Category> subCategories;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: Text(text, style: TextStyle(fontSize: 18.0),),
+    return GestureDetector(
+      onTap: () => navigateToCategoryView(context, mainCategory: this.text,),
+          child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Text(text, style: TextStyle(fontSize: 18.0),),
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@
 // import 'package:bato/ui/screens/login.dart';
 // import 'package:bato/ui/screens/main.dart';
 // import 'package:bato/ui/screens/messages.dart';
+import 'package:bato_test/screens/category.view.dart';
 import 'package:bato_test/screens/home.view.dart';
 import 'package:bato_test/screens/listing.view.dart';
 import 'package:bato_test/utils/route_name.dart';
@@ -16,30 +17,42 @@ import 'package:bato_test/utils/string_extension.dart';
 
 ///Manage Routes
 class RouteGenerator {
-  static Route<dynamic> generateRoute(RouteSettings settings){
+  static Route<dynamic> generateRoute(RouteSettings settings) {
     //Getting the argument passed when Navigator.pushNamed() is called
     var routingData = settings.name.getRoutingData;
-    switch(routingData.route){
+    switch (routingData.route) {
       case HomeRoute:
         return MaterialPageRoute(builder: (context) => Home());
       case ListingViewRoute:
-        if(routingData['listingId'] is String){
-          return MaterialPageRoute(builder: (context) => ListingView(listingId: routingData['listingId'], posterId: routingData['posterId']));
+        if (routingData['listingId'] is String) {
+          return MaterialPageRoute(
+              builder: (context) => ListingView(
+                  listingId: routingData['listingId'],
+                  posterId: routingData['posterId']));
+        }
+        return _errorPage();
+      case CategoryViewRoute:
+        if (routingData['mainCategory'] is String) {
+          return MaterialPageRoute(
+            builder: (context) => CategoryView(
+              mainCategory: routingData['mainCategory'],
+              subCategory: routingData['subCategory'],
+            ),
+          );
         }
         return _errorPage();
       default:
         return MaterialPageRoute(builder: (context) => Home());
     }
   }
-  static Route<dynamic> _errorPage(){
+
+  static Route<dynamic> _errorPage() {
     return MaterialPageRoute(
-      builder: (context) => 
-      Scaffold(
-      appBar: AppBar(
-        title: Text('Error'),
-      ),
-      body: Container(),
-      )
-    );
+        builder: (context) => Scaffold(
+              appBar: AppBar(
+                title: Text('Error'),
+              ),
+              body: Container(),
+            ));
   }
 }

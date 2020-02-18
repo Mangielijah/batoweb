@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:bato_test/models/listing.dart';
 import 'package:bato_test/utils/text_manager.dart';
 import 'package:bato_test/widgets/listing_card.dart';
@@ -8,20 +10,28 @@ import 'package:flutter/material.dart';
 //CloudFireStore
 WebFirestore.Firestore webFirestore = WebFirebase.firestore();
 
-class HotDealsScreen extends StatefulWidget {
+class HotDealsScreenMobile extends StatefulWidget {
   @override
-  _HotDealsScreenState createState() => _HotDealsScreenState();
+  _HotDealsScreenMobileState createState() => _HotDealsScreenMobileState();
 }
 
-class _HotDealsScreenState extends State<HotDealsScreen> {
+class _HotDealsScreenMobileState extends State<HotDealsScreenMobile> {
   int perPage = 4;
   //int present = 0;
   //int lenghtOfDoc = 9;
+  WebFirestore.CollectionReference listingDocRef;
+  var next;
+  WebFirestore.DocumentSnapshot lastDocument;
+  @override
+  void initState() {
+    super.initState();
+    listingDocRef = WebFirebase.firestore().collection("listings");
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 40),
       child: Card(
         margin: EdgeInsets.zero,
         elevation: 0.1,
@@ -36,25 +46,24 @@ class _HotDealsScreenState extends State<HotDealsScreen> {
               Flexible(
                 fit: FlexFit.loose,
                 child: new StreamBuilder(
-                  stream: webFirestore
-                      .collection('listings').limit(perPage)
-                      .get()
-                      .asStream(), //Firestore.instance.collection('listings').snapshots(),
+                  stream: (next != null) ? next.limit(perPage).orderBy("listingID").get().asStream():listingDocRef.limit(perPage).orderBy("listingID").get().asStream(), //Firestore.instance.collection('listings').snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<WebFirestore.QuerySnapshot> snapshot) {
                     if (!snapshot.hasData) return new Text('Loading...');
                     return new GridView.count(
-                      crossAxisCount: 4,
+                      crossAxisCount: 2,
                       shrinkWrap: true,
                       mainAxisSpacing: 8.0,
+                      primary: false,
                       childAspectRatio:
-                          (MediaQuery.of(context).size.width / 4) / 500,
+                          (MediaQuery.of(context).size.width / 2) / 500,
                       crossAxisSpacing: 4.0,
                       scrollDirection: Axis.vertical,
                       children: snapshot.data.docs
                           .map((document) {
                             //lenghtOfDoc = document.data().length;
                             //print(document.data().toString());
+                            lastDocument = document;
                             return new ListingCard(
                               listing: Listing.fromJSON(document),
                             );
@@ -66,15 +75,11 @@ class _HotDealsScreenState extends State<HotDealsScreen> {
                   },
                 ),
               ),
-              /*Container(
-                  child: (perPage < lenghtOfDoc) ? MaterialButton(
+              Container(
+                  child: MaterialButton(
                 onPressed: () {
                   setState(() {
-                    if((present + perPage) > lenghtOfDoc) {
-                      
-                    } else {
-                      perPage += 12;
-                    }
+                    this.next = WebFirebase.firestore().collection("listings").startAfter(snapshot:lastDocument);
                   });
                 },
                 elevation: 0.0,
@@ -83,8 +88,8 @@ class _HotDealsScreenState extends State<HotDealsScreen> {
                   "Load More",
                   style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-              ) : null
-              )*/
+              )
+              )
             ],
           ),
         ),
