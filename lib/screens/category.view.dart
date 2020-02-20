@@ -30,7 +30,12 @@ class CategoryView extends StatefulWidget {
 class _CategoryViewState extends State<CategoryView> {
   var listingsDocRef;
   User seller;
-  int limit = 24;
+  int limit = 12;
+  bool fLoad = true;
+  //int present = 0;
+  //int lenghtOfDoc = 9;
+  Future<List<WebFirestore.DocumentSnapshot>> listingSnapshot;
+  List<WebFirestore.DocumentSnapshot> list = [];
   @override
   void initState() {
     super.initState();
@@ -56,12 +61,63 @@ class _CategoryViewState extends State<CategoryView> {
     //final listingDoc = await listingDocRef.get();
     setState(() {
       this.listingsDocRef = listingDocRef;
+      listingSnapshot = loadMoreListing(listingsDocRef);
       // for (var listing in listingDoc) {
       //   this.listings.add(Listing.fromJSON(listing));
       // }
       // this.listings = Listing.fromJSON(listingDoc);
     });
   }
+
+    //Load other listing
+  
+  Future<List<WebFirestore.DocumentSnapshot>> loadMoreListing(var docRef) async {
+    print(widget.subCategory);
+    if(fLoad){
+    final listingsFetched = await docRef
+        .get();
+        list.addAll(listingsFetched.docs);
+        fLoad = false;
+        return list;
+    }
+    else {
+      
+    final listingsFetched = await docRef
+        .startAfter(snapshot: list[list.length - 1])
+        .get();
+        list.addAll(listingsFetched.docs);
+        return list;
+    }
+  }
+  /*
+  
+  //Load other listing
+  
+  Future<List<WebFirestore.DocumentSnapshot>> loadMoreListing() async {
+    print(widget.subCategory);
+    if(fLoad){
+    final listingsFetched = await webFirestore
+        .collection("listings")
+        .where("subCategory", "==", widget.subCategory)
+        .limit(perPage)
+        .get();
+        list.addAll(listingsFetched.docs);
+        fLoad = false;
+        return list;
+    }
+    else {
+      
+    final listingsFetched = await webFirestore
+        .collection("listings")
+        .where("subCategory", "==", widget.subCategory)
+        .startAfter(snapshot: list[list.length - 1])
+        .limit(perPage)
+        .get();
+        list.addAll(listingsFetched.docs);
+        return list;
+    }
+  }
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -290,14 +346,12 @@ class _CategoryViewState extends State<CategoryView> {
             titleRow(context, "You may also like", iconData: Icons.whatshot),
             Flexible(
               fit: FlexFit.loose,
-              child: new StreamBuilder(
-                stream: listingsDocRef
-                    .get()
-                    .asStream(), //Firestore.instance.collection('listings').snapshots(),
+              child: new FutureBuilder<List<WebFirestore.DocumentSnapshot>>(
+                future: listingSnapshot, //Firestore.instance.collection('listings').snapshots(),
                 builder: (BuildContext context,
-                    AsyncSnapshot<WebFirestore.QuerySnapshot> snapshot) {
+                    AsyncSnapshot<List<WebFirestore.DocumentSnapshot>> snapshot) {
                   if (!snapshot.hasData) return new Text('Loading...');
-                  return (snapshot.data.empty) ? Padding(
+                  return (snapshot.data.length == 0) ? Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Center(child: Text("No Product Available for this Category")),
                   ) :new GridView.count(
@@ -309,7 +363,7 @@ class _CategoryViewState extends State<CategoryView> {
                           (MediaQuery.of(context).size.width / 2) / 500,
                       crossAxisSpacing: 2.0,
                       scrollDirection: Axis.vertical,
-                      children: snapshot.data.docs.map((document) {
+                      children: snapshot.data.map((document) {
                         //lenghtOfDoc = document.data().length;
                         //print(document.data().toString());
                         return new ListingCard(
@@ -322,6 +376,21 @@ class _CategoryViewState extends State<CategoryView> {
                 },
               ),
             ),
+              Container(
+                  child: MaterialButton(
+                onPressed: () {
+                  //_loadMore(perPage).then((value) => listingSnapshot.addAll(value));
+                  setState(() {
+                    listingSnapshot = loadMoreListing(this.listingsDocRef);
+                  });
+                },
+                elevation: 0.0,
+                color: Colors.blue,
+                child: Text(
+                  "Load More",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ))
           ],
         ),
       ),

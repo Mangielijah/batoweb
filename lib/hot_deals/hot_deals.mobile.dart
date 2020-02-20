@@ -1,6 +1,5 @@
-import 'dart:html';
-
 import 'package:bato_test/models/listing.dart';
+import 'package:bato_test/utils/listings_manager.dart';
 import 'package:bato_test/utils/text_manager.dart';
 import 'package:bato_test/widgets/listing_card.dart';
 import 'package:firebase/firestore.dart' as WebFirestore;
@@ -16,16 +15,17 @@ class HotDealsScreenMobile extends StatefulWidget {
 }
 
 class _HotDealsScreenMobileState extends State<HotDealsScreenMobile> {
-  int perPage = 4;
+  int perPage = 6;
+  bool fLoad = true;
   //int present = 0;
   //int lenghtOfDoc = 9;
-  WebFirestore.CollectionReference listingDocRef;
-  var next;
-  WebFirestore.DocumentSnapshot lastDocument;
+  Future<List<WebFirestore.DocumentSnapshot>> listingSnapshot;
+  List<WebFirestore.DocumentSnapshot> list = [];
+
   @override
   void initState() {
     super.initState();
-    listingDocRef = WebFirebase.firestore().collection("listings");
+    listingSnapshot = loadMore();
   }
 
   @override
@@ -45,41 +45,24 @@ class _HotDealsScreenMobileState extends State<HotDealsScreenMobile> {
               titleRow(context, "Fresh Finds", iconData: Icons.whatshot),
               Flexible(
                 fit: FlexFit.loose,
-                child: new StreamBuilder(
-                  stream: (next != null) ? next.limit(perPage).orderBy("listingID").get().asStream():listingDocRef.limit(perPage).orderBy("listingID").get().asStream(), //Firestore.instance.collection('listings').snapshots(),
+                child: new FutureBuilder<List<WebFirestore.DocumentSnapshot>>(
+                  future:
+                      listingSnapshot, //Firestore.instance.collection('listings').snapshots(),
                   builder: (BuildContext context,
-                      AsyncSnapshot<WebFirestore.QuerySnapshot> snapshot) {
-                    if (!snapshot.hasData) return new Text('Loading...');
-                    return new GridView.count(
-                      crossAxisCount: 2,
-                      shrinkWrap: true,
-                      mainAxisSpacing: 8.0,
-                      primary: false,
-                      childAspectRatio:
-                          (MediaQuery.of(context).size.width / 2) / 500,
-                      crossAxisSpacing: 4.0,
-                      scrollDirection: Axis.vertical,
-                      children: snapshot.data.docs
-                          .map((document) {
-                            //lenghtOfDoc = document.data().length;
-                            //print(document.data().toString());
-                            lastDocument = document;
-                            return new ListingCard(
-                              listing: Listing.fromJSON(document),
-                            );
-                          })
-                          .toList()
-                          //.getRange(present, perPage)
-                          //.toList(),
-                    );
+                      AsyncSnapshot<List<WebFirestore.DocumentSnapshot>>
+                          snapshots) {
+                    if (!snapshots.hasData) return new Text('Loading...');
+                    //listingSnapshot.addAll(snapshot.data.docs);
+                    return buildGridView(context, snapshots.data);
                   },
                 ),
               ),
               Container(
                   child: MaterialButton(
                 onPressed: () {
+                  //_loadMore(perPage).then((value) => listingSnapshot.addAll(value));
                   setState(() {
-                    this.next = WebFirebase.firestore().collection("listings").startAfter(snapshot:lastDocument);
+                    listingSnapshot = loadMore();
                   });
                 },
                 elevation: 0.0,
@@ -88,13 +71,57 @@ class _HotDealsScreenMobileState extends State<HotDealsScreenMobile> {
                   "Load More",
                   style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-              )
-              )
+              ))
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<List<WebFirestore.DocumentSnapshot>> loadMore() async {
+    if(fLoad){
+    final listingsFetched = await webFirestore
+        .collection("listings")
+        .orderBy("listingID", "desc")
+        .limit(perPage)
+        .get();
+        list.addAll(listingsFetched.docs);
+        fLoad = false;
+        return list;
+    }
+    else {
+      
+    final listingsFetched = await webFirestore
+        .collection("listings")
+        .orderBy("listingID", "desc")
+        .startAfter(snapshot: list[list.length - 1])
+        .limit(perPage)
+        .get();
+        list.addAll(listingsFetched.docs);
+        return list;
+    }
+  }
+
+  GridView buildGridView(
+      BuildContext context, List<WebFirestore.DocumentSnapshot> snapList) {
+    return new GridView.count(
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        mainAxisSpacing: 8.0,
+        primary: false,
+        childAspectRatio: (MediaQuery.of(context).size.width / 2) / 500,
+        crossAxisSpacing: 4.0,
+        scrollDirection: Axis.vertical,
+        children: snapList.map((document) {
+          //lenghtOfDoc = document.data().length;
+          return new ListingCard(
+            listing: Listing.fromJSON(document),
+          );
+        }).toList()
+        //.getRange(present, perPage)
+        //.toList(),
+        );
   }
 }
 

@@ -21,7 +21,8 @@ WebFirestore.Firestore webFirestore = WebFirebase.firestore();
 class ListingView extends StatefulWidget {
   final String listingId;
   final String posterId;
-  const ListingView({Key key, this.listingId, this.posterId}) : super(key: key);
+  final String subCategory;
+  const ListingView({Key key, this.listingId, this.posterId, this.subCategory}) : super(key: key);
 
   @override
   _ListingViewState createState() => _ListingViewState();
@@ -30,22 +31,60 @@ class ListingView extends StatefulWidget {
 class _ListingViewState extends State<ListingView> {
   Listing listing;
   User seller;
+  
+  int perPage = 8;
+  bool fLoad = true;
+  //int present = 0;
+  //int lenghtOfDoc = 9;
+  Future<List<WebFirestore.DocumentSnapshot>> listingSnapshot;
+  List<WebFirestore.DocumentSnapshot> list = [];
+  
   @override
   void initState() {
     super.initState();
     _loadListing();
+    listingSnapshot = loadMoreListing();
   }
 
   _loadListing() async {
     final listingDocRef =
         webFirestore.collection("listings").doc(widget.listingId);
     final userDocRef = webFirestore.collection('users').doc(widget.posterId);
+    
     final listingDoc = await listingDocRef.get();
     final userDoc = await userDocRef.get();
     setState(() {
       listing = Listing.fromJSON(listingDoc);
       seller = User.fromSnapshot(userDoc);
     });
+    
+  }
+
+  //Load other listing
+  
+  Future<List<WebFirestore.DocumentSnapshot>> loadMoreListing() async {
+    print(widget.subCategory);
+    if(fLoad){
+    final listingsFetched = await webFirestore
+        .collection("listings")
+        .where("subCategory", "==", widget.subCategory)
+        .limit(perPage)
+        .get();
+        list.addAll(listingsFetched.docs);
+        fLoad = false;
+        return list;
+    }
+    else {
+      
+    final listingsFetched = await webFirestore
+        .collection("listings")
+        .where("subCategory", "==", widget.subCategory)
+        .startAfter(snapshot: list[list.length - 1])
+        .limit(perPage)
+        .get();
+        list.addAll(listingsFetched.docs);
+        return list;
+    }
   }
 
   @override
@@ -682,16 +721,16 @@ buildUserReviewBarMobile(BuildContext context, double userRating, int reviewCoun
             titleRow(context, "You may also like", iconData: Icons.whatshot),
             Flexible(
               fit: FlexFit.loose,
-              child: new StreamBuilder(
-                stream: webFirestore
-                    .collection('listings')
-                    .where('subCategory', "==", listing.subCategory)
-                    .limit(12)
-                    .get()
-                    .asStream(), //Firestore.instance.collection('listings').snapshots(),
+              child: new FutureBuilder<List<WebFirestore.DocumentSnapshot>>(
+                future: listingSnapshot,//webFirestore
+                //     .collection('listings')
+                //     .where('subCategory', "==", listing.subCategory)
+                //     .limit(12)
+                //     .get()
+                //     .asStream(), //Firestore.instance.collection('listings').snapshots(),
                 builder: (BuildContext context,
-                    AsyncSnapshot<WebFirestore.QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) return new Text('Loading...');
+                    AsyncSnapshot<List<WebFirestore.DocumentSnapshot>> snapshots) {
+                  if (!snapshots.hasData) return new Text('Loading...');
                   return new GridView.count(
                       crossAxisCount: 2,
                       shrinkWrap: true,
@@ -701,7 +740,7 @@ buildUserReviewBarMobile(BuildContext context, double userRating, int reviewCoun
                           (MediaQuery.of(context).size.width / 2) / 500,
                       crossAxisSpacing: 4.0,
                       scrollDirection: Axis.vertical,
-                      children: snapshot.data.docs.map((document) {
+                      children: snapshots.data.map((document) {
                         //lenghtOfDoc = document.data().length;
                         //print(document.data().toString());
                         return new ListingCard(
@@ -714,6 +753,21 @@ buildUserReviewBarMobile(BuildContext context, double userRating, int reviewCoun
                 },
               ),
             ),
+              Container(
+                  child: MaterialButton(
+                onPressed: () {
+                  //_loadMore(perPage).then((value) => listingSnapshot.addAll(value));
+                  setState(() {
+                    listingSnapshot = loadMoreListing();
+                  });
+                },
+                elevation: 0.0,
+                color: Colors.blue,
+                child: Text(
+                  "Load More",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ))
           ],
         ),
       ),

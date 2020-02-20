@@ -21,7 +21,7 @@ class _ListingCardState extends State<ListingCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => navigateToListing(context, widget.listing.listingID, widget.listing.posterID),
+      onTap: () => navigateToListing(context, widget.listing.listingID, widget.listing.posterID, widget.listing.subCategory),
       child: Card(
         elevation: 0,
         child: Padding(

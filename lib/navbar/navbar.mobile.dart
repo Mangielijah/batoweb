@@ -1,6 +1,10 @@
+import 'package:bato_test/utils/locator.dart';
+import 'package:bato_test/utils/navigation_service.dart';
+import 'package:bato_test/utils/route_name.dart';
 import 'package:bato_test/widgets/searchBar.dart';
 import 'package:flutter/material.dart';
 
+NavigationService _navigationService = locator<NavigationService>();
 class NavBarMobile extends StatelessWidget {
   final double width;
   const NavBarMobile(this.width);
@@ -15,23 +19,29 @@ class NavBarMobile extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Container(
-                height: 32,
-                width: 32,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4.0),
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/logo_only.png"))),
+              GestureDetector(
+                onTap: () => _navigationService.navigateTo(HomeRoute),
+                              child: Container(
+                  height: 32,
+                  width: 32,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/logo_only.png"))),
+                ),
               ),
               SizedBox(
                 width: 8.0,
               ),
-              Text(
-                "Bato",
-                style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey.shade500),
+              GestureDetector(
+                onTap: () => _navigationService.navigateTo(HomeRoute),
+                              child: Text(
+                  "Bato",
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade500),
+                ),
               ),
               SizedBox(
                 width: 15,

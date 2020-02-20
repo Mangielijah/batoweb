@@ -11,10 +11,10 @@ WebFirestore.Firestore webFirestore = WebFirebase.firestore();
 final NavigationService _navigationService = locator<NavigationService>();
 
 ///navigate to Listing
-navigateToListing(BuildContext context, String listingId, String posterId) {
+navigateToListing(BuildContext context, String listingId, String posterId, String subCateory) {
   //Navigator.of(context).pushNamed(ListingViewRoute, arguments: listingId);
   _navigationService.navigateTo(ListingViewRoute,
-      queryParams: {'listingId': listingId, 'posterId': posterId});
+      queryParams: {'listingId': listingId, 'posterId': posterId, 'subCategory': subCateory});
 }
 
 ///Navigate to Category Page

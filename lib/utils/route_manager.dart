@@ -28,7 +28,8 @@ class RouteGenerator {
           return MaterialPageRoute(
               builder: (context) => ListingView(
                   listingId: routingData['listingId'],
-                  posterId: routingData['posterId']));
+                  posterId: routingData['posterId'],
+                  subCategory: routingData['subCategory'],));
         }
         return _errorPage();
       case CategoryViewRoute:
