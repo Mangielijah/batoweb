@@ -1,5 +1,4 @@
 import 'package:bato_test/models/listing.dart';
-import 'package:bato_test/utils/listings_manager.dart';
 import 'package:bato_test/utils/text_manager.dart';
 import 'package:bato_test/widgets/listing_card.dart';
 import 'package:firebase/firestore.dart' as WebFirestore;

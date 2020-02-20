@@ -1,4 +1,3 @@
-import 'package:bato_test/widgets/searchBar.dart';
 import 'package:flutter/material.dart';
 
 class FooterMobile extends StatelessWidget {

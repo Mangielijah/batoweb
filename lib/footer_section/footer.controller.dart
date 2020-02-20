@@ -1,6 +1,4 @@
 import 'package:bato_test/footer_section/footer.mobile.dart';
-import 'package:bato_test/navbar/navbar.desktop.dart';
-import 'package:bato_test/navbar/navbar.mobile.dart';
 import 'package:flutter/material.dart';
 
 class Footer extends StatelessWidget {
