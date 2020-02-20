@@ -1,4 +1,5 @@
 import 'package:bato_test/category_section/category_view.dart';
+import 'package:bato_test/footer_section/footer.controller.dart';
 import 'package:bato_test/models/listing.dart';
 import 'package:bato_test/navbar/navbar.dart';
 import 'package:bato_test/navbar/navbar.menu.dart';
@@ -155,7 +156,11 @@ class _CategoryViewState extends State<CategoryView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             _buildBreadCrumb(),
-                            _showOtherListing()
+                            _showOtherListing(),
+                                  SizedBox(
+                                    height: 14,
+                                  ),
+                                  Footer(),
                           ],
                         ),
                       ),
@@ -172,7 +177,11 @@ class _CategoryViewState extends State<CategoryView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           _buildBreadCrumb(),
-                          _showOtherListing()
+                          _showOtherListing(),
+                                  SizedBox(
+                                    height: 14,
+                                  ),
+                                  Footer(),
                         ],
                       ),
                     );
@@ -189,6 +198,10 @@ class _CategoryViewState extends State<CategoryView> {
                           _buildBreadCrumbMobile(),
                           _buildCategories(context),
                           _showOtherListingMobile(),
+                                  SizedBox(
+                                    height: 14,
+                                  ),
+                                  Footer(),
                         ],
                       ),
                     );

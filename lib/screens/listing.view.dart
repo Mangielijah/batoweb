@@ -1,3 +1,4 @@
+import 'package:bato_test/footer_section/footer.controller.dart';
 import 'package:bato_test/models/listing.dart';
 import 'package:bato_test/navbar/navbar.dart';
 import 'package:bato_test/navbar/navbar.menu.dart';
@@ -119,61 +120,86 @@ class _ListingViewState extends State<ListingView> {
                     : LayoutBuilder(builder: (context, constraints) {
                         if (constraints.maxWidth > 1200) {
                           //desktop View
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 110),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 150, vertical: 20),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  _buildBreadCrumb(),
-                                  _listingDetailCard(),
-                                  SizedBox(
-                                    height: 16,
+                          return Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 110),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 150, vertical: 20),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      _buildBreadCrumb(),
+                                      _listingDetailCard(),
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      _showOtherListing(),
+                                    ],
                                   ),
-                                  _showOtherListing()
-                                ],
+                                ),
                               ),
-                            ),
+                                  SizedBox(
+                                    height: 14,
+                                  ),
+                                  Footer(),
+                            ],
                           );
                         } else if (constraints.maxWidth > 800 &&
                             constraints.maxWidth < 1200) {
                           // Tablet View
 
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 20),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                _buildBreadCrumb(),
-                                _listingDetailCard(),
-                                SizedBox(
-                                  height: 16,
+                          return Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    _buildBreadCrumb(),
+                                    _listingDetailCard(),
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                    _showOtherListing(),
+                                  ],
                                 ),
-                                _showOtherListing()
-                              ],
-                            ),
+                              ),
+                                  SizedBox(
+                                    height: 14,
+                                  ),
+                                  Footer(),
+                            ],
                           );
                         } else {
                           // mobile view of website
 
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 4),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                _buildBreadCrumbMobile(),
-                                _listingDetailCardMobile(),
-                                SizedBox(
-                                  height: 16,
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    _buildBreadCrumbMobile(),
+                                    _listingDetailCardMobile(),
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                    _showOtherListingMobile(),
+                                  ],
                                 ),
-                                _showOtherListingMobile()
-                              ],
-                            ),
+                              ),
+                                  SizedBox(
+                                    height: 14,
+                                  ),
+                                  Footer(),
+                            ],
                           );
                         }
                       }),

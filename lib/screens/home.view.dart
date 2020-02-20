@@ -1,5 +1,6 @@
 import 'package:bato_test/banner_section/banner_section.controller.dart';
 import 'package:bato_test/category_section/category_controller.dart';
+import 'package:bato_test/footer_section/footer.controller.dart';
 import 'package:bato_test/hot_deals/hot_deals_controller.dart';
 import 'package:bato_test/navbar/navbar.dart';
 import 'package:bato_test/navbar/navbar.menu.dart';
@@ -37,7 +38,8 @@ class Home extends StatelessWidget {
                   children: <Widget>[
                     BannerSection(),
                     CategoryController(),
-                    HotDealsController()
+                    HotDealsController(),
+                    Footer()
                   ],
                 ),
               ),
